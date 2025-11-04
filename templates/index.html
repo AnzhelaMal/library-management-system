@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block title %} Home - Quill {% endblock %} 
+
+{% block content %}
+<section class="hero bg-yellow-50 text-center py-20">
+  <div class="container mx-auto">
+    <h1 class="text-4xl font-extrabold text-gray-800">Home | Quill</h1>
+    <p class="text-lg text-gray-600 mt-4">Discover, Read, and Share your Favorite Books</p>
+    <a href="{% url 'books:catalog' %}" class="mt-8 inline-block bg-yellow-400 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition duration-300 hover:bg-yellow-500">
+      Browse Books
+    </a>
+  </div>
+</section>
+
+<main>
+  <section class="bg-white py-16">
+    <div class="container mx-auto">
+      <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Explore by Genre</h2>
+      <div class="flex flex-wrap justify-center space-x-4">
+          {% for genre in popular_genres %}
+            <a href="{% url 'books:catalog' %}?genre={{ genre.id }}" class="text-xl font-semibold text-white">
+              <div class="max-w-xs w-60 bg-yellow-400 text-center py-4 px-6 rounded-lg shadow-md mb-4 transition duration-300 hover:bg-yellow-500">
+                {{ genre.title }}
+              </div>
+            </a>
+          {% empty %}
+            <p>No genres to display.</p>
+          {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-gray-100 py-16">
+    <div class="container mx-auto">
+      <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Recent Releases</h2>
+      <div class="flex flex-wrap justify-center">
+        {% for book in recent_books %}
+        <article class="max-w-xs w-60 bg-white rounded-lg shadow-md m-4 p-6 book-card">
+          <a href="{% url 'books:page' slug=book.slug %}">
+            <img
+              class="w-full h-64 object-cover rounded-t-lg"
+              src={{book.cover.url}}
+              alt="{{book.title}}" />
+            <div class="p-4 text-center">
+              <h3 class="text-xl font-semibold text-gray-700">{{book.title}}</h3>
+              <p class="text-gray-500">{{ book.author }}</p>
+              <p class="text-gray-600 mt-2">${{ book.price }}</p>
+            </div>
+          </a>
+        </article>
+        {% empty %}
+          <p>No recent releases available.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-16">
+    <div class="container mx-auto">
+      <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Coming Soon</h2>
+      <div class="flex flex-wrap justify-center">
+        {% for book in coming_soon_books %}
+          <article class="max-w-xs w-60 bg-white rounded-lg shadow-md m-4 p-6 book-card">
+            <a href="{% url 'books:page' slug=book.slug %}">
+              <img
+                class="w-full h-64 object-cover rounded-t-lg"
+                src={{book.cover.url}}
+                alt="{{book.title}}" />
+              <div class="p-4 text-center">
+                <h3 class="text-xl font-semibold text-gray-700">{{book.title}}</h3>
+                <p class="text-gray-500">{{book.author}}</p>
+                <p class="text-sm text-yellow-500 mt-2">Available on {{book.publication_date}}</p>
+              </div>
+            </a>
+          </article>
+        {% empty %}
+          <p>no</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  
+</main>
+{% endblock %}
